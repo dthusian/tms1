@@ -1,0 +1,1 @@
+exec docker run --rm -it --mount type=bind,source="$(pwd)",target=/mnt -w /mnt ghdl/ghdl:bookworm-mcode /usr/local/bin/ghdl $@
