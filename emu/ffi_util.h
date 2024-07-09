@@ -1,6 +1,9 @@
 #ifndef FFI_UTIL_H
 #define FFI_UTIL_H
 
+#include<stdint.h>
+#include<stddef.h>
+#include<string.h>
 #include"vhpi_user.h"
 
 static const char std_logic_char[] = { 'U', 'X', '0', '1', 'Z', 'W', 'L', 'H', '-'};
@@ -15,10 +18,11 @@ enum std_logic_states {
   HDL_H = vhpiH,         /* weak 1 */
   HDL_D = vhpiDontCare   /* don't care */
 };
+typedef uint8_t std_logic;
 
-static uint32_t logic_to_u32(uint8_t* logic) {
+static uint32_t logic_to_u32(const std_logic* logic) {
   uint32_t ret = 0;
-  for(unsigned int i = 0; i < 32; i++) {
+  for(size_t i = 0; i < 32; i++) {
     if(logic[i] == HDL_1 || logic[i] == HDL_H) {
       ret |= 1 << (31 - i);
     }
@@ -26,12 +30,46 @@ static uint32_t logic_to_u32(uint8_t* logic) {
   return ret;
 }
 
-static void u32_to_logic(uint8_t* logic, uint32_t v) {
-  for(unsigned int i = 0; i < 32; i++) {
+static void u32_to_logic(std_logic* logic, uint32_t v) {
+  for(size_t i = 0; i < 32; i++) {
     if(v & (1 << (31 - i))) {
       logic[i] = HDL_1;
     } else {
       logic[i] = HDL_0;
+    }
+  }
+}
+
+static void cstr_to_logic(char* s, std_logic* logic) {
+  size_t len = strlen(s);
+  for(size_t i = 0; i < len; i++) {
+    switch(s[i]) {
+      case 'U':
+        logic[i] = HDL_U;
+        break;
+      case '0':
+        logic[i] = HDL_0;
+        break;
+      case '1':
+        logic[i] = HDL_1;
+        break;
+      case 'Z':
+        logic[i] = HDL_Z;
+        break;
+      case 'W':
+        logic[i] = HDL_W;
+        break;
+      case 'L':
+        logic[i] = HDL_L;
+        break;
+      case 'H':
+        logic[i] = HDL_H;
+        break;
+      case 'D':
+        logic[i] = HDL_D;
+        break;
+      default:
+        logic[i] = HDL_X;
     }
   }
 }

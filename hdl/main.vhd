@@ -5,29 +5,66 @@ library work;
 use work.ffi.all;
 
 entity main is port (
-  data : out signed(31 downto 0)
+  dummy : out boolean
 );
 end entity main;
 
 architecture testbench of main is
+  signal addr_out : std_logic_vector(31 downto 0);
+  signal data_out : std_logic_vector(31 downto 0);
 begin
   process
+    variable addr : std_logic_vector(31 downto 0);
+    variable data : std_logic_vector(31 downto 0);
   begin
-    data <= (to_signed(rom_read(0), 32));
+    rom2_open(0);
+
+    addr := X"00000000";
+    rom2_cycle(addr, data);
+    addr_out <= addr;
+    data_out <= data;
     wait for 10 ns;
-    data <= (to_signed(rom_read(4), 32));
+
+    addr := X"00000004";
+    rom2_cycle(addr, data);
+    addr_out <= addr;
+    data_out <= data;
     wait for 10 ns;
-    data <= (to_signed(rom_read(8), 32));
+
+    addr := X"00000008";
+    rom2_cycle(addr, data);
+    addr_out <= addr;
+    data_out <= data;
     wait for 10 ns;
-    data <= (to_signed(rom_read(12), 32));
+
+    addr := X"0000000c";
+    rom2_cycle(addr, data);
+    addr_out <= addr;
+    data_out <= data;
     wait for 10 ns;
-    data <= (to_signed(rom_read(16), 32));
+
+    addr := X"00000010";
+    rom2_cycle(addr, data);
+    addr_out <= addr;
+    data_out <= data;
     wait for 10 ns;
-    data <= (to_signed(rom_read(20), 32));
+
+    addr := X"00000014";
+    rom2_cycle(addr, data);
+    addr_out <= addr;
+    data_out <= data;
     wait for 10 ns;
-    data <= (to_signed(rom_read(24), 32));
+
+    addr := X"00000018";
+    rom2_cycle(addr, data);
+    addr_out <= addr;
+    data_out <= data;
     wait for 10 ns;
-    data <= (to_signed(rom_read(28), 32));
+
+    addr := X"0000001c";
+    rom2_cycle(addr, data);
+    addr_out <= addr;
+    data_out <= data;
     wait for 10 ns;
   end process;
 end;

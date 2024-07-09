@@ -4,9 +4,9 @@
 #include"vhpi_user.h"
 #include"ffi_util.h"
 
-FILE* rom_fp = NULL;
+static FILE* rom_fp = NULL;
 
-__attribute__((constructor)) void rom_open() {
+__attribute__((constructor)) static void rom_open() {
   rom_fp = fopen("rom.bin", "rb");
 }
 
