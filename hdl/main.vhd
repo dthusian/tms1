@@ -10,61 +10,49 @@ entity main is port (
 end entity main;
 
 architecture testbench of main is
-  signal addr_out : std_logic_vector(31 downto 0);
-  signal data_out : std_logic_vector(31 downto 0);
 begin
   process
     variable addr : std_logic_vector(31 downto 0);
     variable data : std_logic_vector(31 downto 0);
+    variable write_en : std_logic;
+    variable read_en: std_logic;
   begin
     rom2_open(0);
 
+    write_en := '1';
+    read_en := '0';
+
     addr := X"00000000";
     rom2_cycle(addr, data);
-    addr_out <= addr;
-    data_out <= data;
+    uart_cycle(write_en, read_en, data(7 downto 0));
+    wait for 10 ns;
+    uart_cycle(write_en, read_en, data(15 downto 8));
+    wait for 10 ns;
+    uart_cycle(write_en, read_en, data(23 downto 16));
+    wait for 10 ns;
+    uart_cycle(write_en, read_en, data(31 downto 24));
     wait for 10 ns;
 
     addr := X"00000004";
     rom2_cycle(addr, data);
-    addr_out <= addr;
-    data_out <= data;
+    uart_cycle(write_en, read_en, data(7 downto 0));
+    wait for 10 ns;
+    uart_cycle(write_en, read_en, data(15 downto 8));
+    wait for 10 ns;
+    uart_cycle(write_en, read_en, data(23 downto 16));
+    wait for 10 ns;
+    uart_cycle(write_en, read_en, data(31 downto 24));
     wait for 10 ns;
 
     addr := X"00000008";
     rom2_cycle(addr, data);
-    addr_out <= addr;
-    data_out <= data;
+    uart_cycle(write_en, read_en, data(7 downto 0));
     wait for 10 ns;
-
-    addr := X"0000000c";
-    rom2_cycle(addr, data);
-    addr_out <= addr;
-    data_out <= data;
+    uart_cycle(write_en, read_en, data(15 downto 8));
     wait for 10 ns;
-
-    addr := X"00000010";
-    rom2_cycle(addr, data);
-    addr_out <= addr;
-    data_out <= data;
+    uart_cycle(write_en, read_en, data(23 downto 16));
     wait for 10 ns;
-
-    addr := X"00000014";
-    rom2_cycle(addr, data);
-    addr_out <= addr;
-    data_out <= data;
-    wait for 10 ns;
-
-    addr := X"00000018";
-    rom2_cycle(addr, data);
-    addr_out <= addr;
-    data_out <= data;
-    wait for 10 ns;
-
-    addr := X"0000001c";
-    rom2_cycle(addr, data);
-    addr_out <= addr;
-    data_out <= data;
+    uart_cycle(write_en, read_en, data(31 downto 24));
     wait for 10 ns;
   end process;
 end;

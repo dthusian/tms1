@@ -1,4 +1,7 @@
 {
   "vhdl.formatter.case.keyword": "LowerCase",
-  "vhdl.formatter.case.typename": "LowerCase"
+  "vhdl.formatter.case.typename": "LowerCase",
+  "files.associations": {
+    "stdio.h": "c"
+  }
 }

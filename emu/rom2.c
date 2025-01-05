@@ -17,10 +17,6 @@ void rom2_open() {
   }
 }
 
-struct rom2_cycle_out {
-  std_logic data_sl[32];
-};
-
 void rom2_cycle(const std_logic* addr_sl, std_logic* data_sl) {
   uint32_t addr = logic_to_u32(addr_sl);
   fseek(rom_fp, addr, SEEK_SET);

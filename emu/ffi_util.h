@@ -20,10 +20,34 @@ enum std_logic_states {
 };
 typedef uint8_t std_logic;
 
+static int logic_to_bool(std_logic logic) {
+  return logic == HDL_1 || logic == HDL_H;
+}
+
+static uint32_t logic_to_u8(const std_logic* logic) {
+  uint32_t ret = 0;
+  for(size_t i = 0; i < 8; i++) {
+    if(logic_to_bool(logic[i])) {
+      ret |= 1 << (7 - i);
+    }
+  }
+  return ret;
+}
+
+static void u8_to_logic(std_logic* logic, uint8_t v) {
+  for(size_t i = 0; i < 8; i++) {
+    if(v & (1 << (7 - i))) {
+      logic[i] = HDL_1;
+    } else {
+      logic[i] = HDL_0;
+    }
+  }
+}
+
 static uint32_t logic_to_u32(const std_logic* logic) {
   uint32_t ret = 0;
   for(size_t i = 0; i < 32; i++) {
-    if(logic[i] == HDL_1 || logic[i] == HDL_H) {
+    if(logic_to_bool(logic[i])) {
       ret |= 1 << (31 - i);
     }
   }
