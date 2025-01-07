@@ -1,0 +1,17 @@
+/dts-v1/;
+
+/ {
+  #address-cells = <1>;
+  #size-cells = <1>;
+  compatible = "dthusian,tms1";
+
+  mem: memory@20000000 {
+    device_type = "memory";
+    reg = <0x20000000, 0x8000000>;
+  }
+
+  uart0: serial@30000000 {
+    compatible = "dthusian,tms1-uart";
+    reg = <0x30000000, 0x8>;
+  }
+}

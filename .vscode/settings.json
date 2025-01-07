@@ -2,6 +2,8 @@
   "vhdl.formatter.case.keyword": "LowerCase",
   "vhdl.formatter.case.typename": "LowerCase",
   "files.associations": {
-    "stdio.h": "c"
+    "stdio.h": "c",
+    "stdlib.h": "c",
+    "bus.h": "c"
   }
 }
