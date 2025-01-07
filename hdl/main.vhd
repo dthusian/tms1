@@ -10,50 +10,68 @@ entity main is port (
 end entity main;
 
 architecture testbench of main is
+  component cpu port (
+    clk : in std_logic;
+    syshalt : out std_logic;
+
+    mem_addr : out std_logic_vector(31 downto 0);
+    mem_rdata : in std_logic_vector(31 downto 0);
+    mem_wdata : out std_logic_vector(31 downto 0);
+    mem_size : out std_logic_vector(1 downto 0);
+    mem_read_en : out std_logic;
+    mem_write_en : out std_logic;
+    mem_fault : in std_logic
+  );
+  end component;
+
+  signal clk : std_logic;
+  signal syshalt : std_logic;
+  signal mem_addr : std_logic_vector(31 downto 0);
+  signal mem_rdata : std_logic_vector(31 downto 0);
+  signal mem_wdata : std_logic_vector(31 downto 0);
+  signal mem_size : std_logic_vector(1 downto 0);
+  signal mem_write_en : std_logic;
+  signal mem_read_en: std_logic;
+  signal mem_fault: std_logic;
 begin
+  CPU_INST: cpu port map (
+    clk,
+    syshalt,
+    mem_addr,
+    mem_rdata,
+    mem_wdata,
+    mem_size,
+    mem_write_en,
+    mem_read_en,
+    mem_fault
+  );
+
   process
-    variable addr : std_logic_vector(31 downto 0);
-    variable data : std_logic_vector(31 downto 0);
-    variable write_en : std_logic;
-    variable read_en: std_logic;
+    variable tmp_mem_rdata : std_logic_vector(31 downto 0) := X"00000000";
+    variable tmp_mem_fault : std_logic := '0';
   begin
-    rom2_open(0);
+    bus_init;
+    while syshalt /= '1' loop
+      -- rising edge triggers CPU
+      clk <= '1';
+      -- initiate bus cycle after CPU
+      bus_cycle(  
+        mem_addr,
+        tmp_mem_rdata,
+        mem_wdata,
+        mem_size,
+        mem_write_en,
+        mem_read_en,
+        tmp_mem_fault
+      );
+      mem_rdata <= tmp_mem_rdata;
+      mem_fault <= tmp_mem_fault;
 
-    write_en := '1';
-    read_en := '0';
-
-    addr := X"00000000";
-    rom2_cycle(addr, data);
-    uart_cycle(write_en, read_en, data(7 downto 0));
-    wait for 10 ns;
-    uart_cycle(write_en, read_en, data(15 downto 8));
-    wait for 10 ns;
-    uart_cycle(write_en, read_en, data(23 downto 16));
-    wait for 10 ns;
-    uart_cycle(write_en, read_en, data(31 downto 24));
-    wait for 10 ns;
-
-    addr := X"00000004";
-    rom2_cycle(addr, data);
-    uart_cycle(write_en, read_en, data(7 downto 0));
-    wait for 10 ns;
-    uart_cycle(write_en, read_en, data(15 downto 8));
-    wait for 10 ns;
-    uart_cycle(write_en, read_en, data(23 downto 16));
-    wait for 10 ns;
-    uart_cycle(write_en, read_en, data(31 downto 24));
-    wait for 10 ns;
-
-    addr := X"00000008";
-    rom2_cycle(addr, data);
-    uart_cycle(write_en, read_en, data(7 downto 0));
-    wait for 10 ns;
-    uart_cycle(write_en, read_en, data(15 downto 8));
-    wait for 10 ns;
-    uart_cycle(write_en, read_en, data(23 downto 16));
-    wait for 10 ns;
-    uart_cycle(write_en, read_en, data(31 downto 24));
-    wait for 10 ns;
+      wait for 50 ns;
+      clk <= '0';
+      wait for 50 ns;
+    end loop;
+    wait;
   end process;
 end;
 

@@ -95,7 +95,8 @@ void bus_cycle(
   const std_logic* wdata, // 32b
 
   const std_logic* size, // 2b, 00 = 8, 01 = 16, 10 = 32
-  const std_logic write, // 1b (non-vector), 0 = read, 1 = write
+  const std_logic write_en,
+  const std_logic read_en,
   std_logic* fault // 1b, 0 = normal, 1 = fault
 ) {
   uart_cycle();
@@ -110,14 +111,16 @@ void bus_cycle(
 
   uint32_t addr2 = logic_to_u32(addr);
   int fail = 0;
-  if(logic_to_bool(write)) {
-    uint32_t data = logic_to_u32(wdata);
-    fail = write_memory(addr2, data, size_int);
-    for(int i = 0; i < 32; i++) rdata[i] = HDL_X;
-  } else {
+  if(logic_to_bool(read_en)) {
     uint32_t data = 0;
     fail = read_memory(addr2, &data, size_int);
     u32_to_logic(rdata, data);
+  } else {
+    for(int i = 0; i < 32; i++) rdata[i] = HDL_0;
+  }
+  if(logic_to_bool(write_en)) {
+    uint32_t data = logic_to_u32(wdata);
+    fail = write_memory(addr2, data, size_int);
   }
 
   if(fail) {
