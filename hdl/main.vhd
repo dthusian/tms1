@@ -12,6 +12,7 @@ end entity main;
 architecture testbench of main is
   component cpu port (
     clk : in std_logic;
+    init : in std_logic;
     syshalt : out std_logic;
 
     mem_addr : out std_logic_vector(31 downto 0);
@@ -24,7 +25,8 @@ architecture testbench of main is
   );
   end component;
 
-  signal clk : std_logic;
+  signal clk : std_logic := '0';
+  signal init : std_logic := '1';
   signal syshalt : std_logic;
   signal mem_addr : std_logic_vector(31 downto 0);
   signal mem_rdata : std_logic_vector(31 downto 0);
@@ -36,6 +38,7 @@ architecture testbench of main is
 begin
   CPU_INST: cpu port map (
     clk,
+    init,
     syshalt,
     mem_addr,
     mem_rdata,
@@ -54,6 +57,8 @@ begin
     while syshalt /= '1' loop
       -- rising edge triggers CPU
       clk <= '1';
+      -- turn off init
+      init <= '0';
       -- initiate bus cycle after CPU
       bus_cycle(  
         mem_addr,
