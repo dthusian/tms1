@@ -1,6 +1,5 @@
 library ieee;
 use ieee.std_logic_1164.all;
-library work;
 use work.opcodes.all;
 
 entity instr_decoder is port (
@@ -64,13 +63,13 @@ begin
     (opcode = OP_BRANCH and funct3 /= "010" and funct3 /= "011") or
     (opcode = OP_LOAD and funct3 /= "011" and funct3 /= "110" and funct3 /= "111") or
     (opcode = OP_STORE and (funct3 = "000" or funct3 = "001" or funct3 = "010")) or
-    (opcode = OP_OPIMM and
-      ((funct7 = "0000000" and funct3 = FN_SLL) or (funct3 /= FN_SLL)) and
-      (((funct7 = "0000000" or funct7 = "0100000") and funct3 = FN_SRL) or (funct3 /= FN_SRL))
-    ) or
-    (opcode = OP_OP and
-      ((funct7 = "0000000" and funct3 /= FN_ADD and funct3 /= FN_SRL) or ((funct7 = "0000000" or funct7 = "0100000") or (funct3 = FN_ADD or funct3 = FN_SRL)))
-    ) or
+    (opcode = OP_OPIMM and funct3 /= FN_SLL and funct3 /= FN_SRL) or
+    (opcode = OP_OPIMM and funct3 = FN_SLL and funct7 = "0000000") or
+    (opcode = OP_OPIMM and funct3 = FN_SRL and (funct7 = "0000000" or funct7 = "0100000")) or
+    (opcode = OP_OP and (
+      funct7 = "0000000" or
+      (funct7 = "0100000" and (funct3 = FN_SUB or funct3 = FN_SRA))
+    )) or
     opcode = OP_FENCE or
     opcode = OP_SYSTEM
     else '1';

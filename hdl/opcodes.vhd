@@ -15,6 +15,8 @@ package opcodes is
   constant OP_FENCE  : std_logic_vector(6 downto 0) := "0001111";
   constant OP_SYSTEM : std_logic_vector(6 downto 0) := "1110011";
 
+  -- funct7 = "0000000"
+  constant F7_OP1  : std_logic_vector(6 downto 0) := "0000000";
   constant FN_ADD  : std_logic_vector(2 downto 0) := "000";
   constant FN_SLT  : std_logic_vector(2 downto 0) := "010";
   constant FN_SLTU : std_logic_vector(2 downto 0) := "011";
@@ -23,5 +25,21 @@ package opcodes is
   constant FN_AND  : std_logic_vector(2 downto 0) := "111";
   constant FN_SLL  : std_logic_vector(2 downto 0) := "001";
   constant FN_SRL  : std_logic_vector(2 downto 0) := "101";
+
+  -- funct7 = "0100000"
+  constant F7_OP2  : std_logic_vector(6 downto 0) := "0100000";
+  constant FN_SUB  : std_logic_vector(2 downto 0) := "000";
+  constant FN_SRA  : std_logic_vector(2 downto 0) := "101";
+
+  -- funct7 = "0000001"
+  constant F7_MUL    : std_logic_vector(6 downto 0) := "0000001";
+  constant FN_MUL    : std_logic_vector(2 downto 0) := "000";
+  constant FN_MULH   : std_logic_vector(2 downto 0) := "001";
+  constant FN_MULHSU : std_logic_vector(2 downto 0) := "010";
+  constant FN_MULHU  : std_logic_vector(2 downto 0) := "011";
+  constant FN_DIV    : std_logic_vector(2 downto 0) := "100";
+  constant FN_DIVU   : std_logic_vector(2 downto 0) := "101";
+  constant FN_REM    : std_logic_vector(2 downto 0) := "110";
+  constant FN_REMU   : std_logic_vector(2 downto 0) := "111";
 
 end opcodes;
