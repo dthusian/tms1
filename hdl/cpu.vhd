@@ -1,5 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use work.opcodes.UNDEF32;
 
 entity cpu is port (
   clk : in std_logic;
@@ -57,6 +58,7 @@ architecture rtl of cpu is
     init : in std_logic;
 
     opcode : in std_logic_vector(6 downto 0);
+    funct3 : in std_logic_vector(2 downto 0);
 
     -- 1: bus3 will be written to regfile on next clock
     reg_write_en : out std_logic;
@@ -175,8 +177,6 @@ architecture rtl of cpu is
   -- misc
   signal branch_out : std_logic;
   signal branch_pc : std_logic_vector(31 downto 0);
-
-  constant UNDEF32 : std_logic_vector(31 downto 0) := "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 begin
   trap_memory_fault <= mem_fault;
 
@@ -238,6 +238,7 @@ begin
     init,
 
     id_opcode,
+    id_funct3,
 
     cu_reg_write_en,
     cu_bus1_mux,

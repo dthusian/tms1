@@ -12,6 +12,16 @@ AR="ar"
 
 BUILD_DIR="build/"
 HDL_DIR="hdl/"
+HDL_FILES="
+hdl/ffi.vhd
+hdl/main.vhd hdl/opcodes.vhd
+hdl/instr_decoder.vhd
+hdl/instr_fetch.vhd
+hdl/cpu.vhd
+hdl/alu.vhd
+hdl/control_unit.vhd
+hdl/shifter.vhd
+hdl/reg_file.vhd"
 EMU_DIR="emu/"
 
 set -e
@@ -23,8 +33,6 @@ build_dir() {
 
 analyze() {
   set -e
-  #HDL_FILES=`find hdl/ -type f`
-  HDL_FILES="hdl/ffi.vhd hdl/main.vhd hdl/opcodes.vhd hdl/instr_decoder.vhd hdl/instr_fetch.vhd hdl/cpu.vhd hdl/alu.vhd"
   for F in $HDL_FILES ; do
     printf "GHDL_A $F\n"
   done
