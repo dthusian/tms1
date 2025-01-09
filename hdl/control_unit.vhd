@@ -95,16 +95,20 @@ begin
         mem_ifetch <= '1';
         lsu_signed <= '0'; -- dont care
 
-        case opcode is
-          when OP_LOAD | OP_STORE =>
-            npc_mux <= "00"; -- stay on same pc for next mem cycle
-          when OP_JAL | OP_JALR =>
-            npc_mux <= "10";
-          when OP_BRANCH =>
-            npc_mux <= "11";
-          when others =>
-            npc_mux <= "01";
-        end case;
+        if init = '1' then
+          npc_mux <= "00";
+        else
+          case opcode is
+            when OP_LOAD | OP_STORE =>
+              npc_mux <= "00"; -- stay on same pc for next mem cycle
+            when OP_JAL | OP_JALR =>
+              npc_mux <= "10";
+            when OP_BRANCH =>
+              npc_mux <= "11";
+            when others =>
+              npc_mux <= "01";
+          end case;
+        end if;
 
         alu_opr <= '1' when opcode = OP_OP else '0';
 
@@ -119,7 +123,7 @@ begin
         mem_write_en <= '1' when opcode = OP_STORE else '0';
         mem_size <= funct3(1 downto 0);
         mem_ifetch <= '0';
-        lsu_signed <= funct3(2);
+        lsu_signed <= not funct3(2);
         npc_mux <= "01"; -- pc + 4
         alu_opr <= '0';
 

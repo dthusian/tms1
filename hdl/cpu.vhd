@@ -274,7 +274,7 @@ begin
 
     rs1_val,
     rs2_val,
-    bus3,
+    reg_write,
     cu_reg_write_en
   );
 
