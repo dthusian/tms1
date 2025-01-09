@@ -1,21 +1,8 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-entity instr_decoder is port (
-  instr : in std_logic_vector(31 downto 0);
+package opcodes is
 
-  invalid_instr: out std_logic;
-  opcode : out std_logic_vector(6 downto 0);
-  rs1 : out std_logic_vector(4 downto 0);
-  rs2 : out std_logic_vector(4 downto 0);
-  rd : out std_logic_vector(4 downto 0);
-  funct3 : out std_logic_vector(2 downto 0);
-  funct7 : out std_logic_vector(6 downto 0);
-  imm : out std_logic_vector(31 downto 0)
-);
-end entity;
-
-architecture rtl of instr_decoder is
   constant OP_LUI    : std_logic_vector(6 downto 0) := "0110111";
   constant OP_AUIPC  : std_logic_vector(6 downto 0) := "0010111";
   constant OP_JAL    : std_logic_vector(6 downto 0) := "1101111";
@@ -27,6 +14,14 @@ architecture rtl of instr_decoder is
   constant OP_OPIMM  : std_logic_vector(6 downto 0) := "0010011";
   constant OP_FENCE  : std_logic_vector(6 downto 0) := "0001111";
   constant OP_SYSTEM : std_logic_vector(6 downto 0) := "1110011";
-begin
-  opcode <= instr(6 downto 0);
-end rtl;
+
+  constant FN_ADD  : std_logic_vector(2 downto 0) := "000";
+  constant FN_SLT  : std_logic_vector(2 downto 0) := "010";
+  constant FN_SLTU : std_logic_vector(2 downto 0) := "011";
+  constant FN_XOR  : std_logic_vector(2 downto 0) := "100";
+  constant FN_OR   : std_logic_vector(2 downto 0) := "110";
+  constant FN_AND  : std_logic_vector(2 downto 0) := "111";
+  constant FN_SLL  : std_logic_vector(2 downto 0) := "001";
+  constant FN_SRL  : std_logic_vector(2 downto 0) := "101";
+
+end opcodes;

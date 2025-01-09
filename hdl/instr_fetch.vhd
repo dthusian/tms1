@@ -1,5 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 entity instr_fetch is port (
   clk : in std_logic;
@@ -40,6 +41,7 @@ begin
     end if;
   end process;
 
+  pc_inc <= std_logic_vector(unsigned(pc) + 4);
   pc <= pc_reg;
   instr <= instr_reg;
 end rtl;

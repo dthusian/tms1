@@ -1,6 +1,5 @@
 library ieee;
 use ieee.std_logic_1164.all;
-use work.cpu_parts.all;
 
 entity cpu is port (
   clk : in std_logic;
@@ -68,9 +67,10 @@ architecture rtl of cpu is
     -- 0: rs2 value
     -- 1: imm value
     bus2_mux : out std_logic;
-    -- 0: alu
-    -- 1: load/store unit
-    bus3_mux : out std_logic;
+    -- 00: bus3
+    -- 01: pcinc
+    -- 10: lsu_out
+    reg_write_mux : out std_logic_vector(1 downto 0);
     -- 1: reads from memory
     mem_read_en : out std_logic;
     -- 1: writes to memory
@@ -113,7 +113,7 @@ architecture rtl of cpu is
     funct7 : in std_logic_vector(6 downto 0);
     a : in std_logic_vector(31 downto 0);
     b : in std_logic_vector(31 downto 0);
-    q : in std_logic_vector(31 downto 0)
+    q : out std_logic_vector(31 downto 0)
   );
   end component;
 
@@ -153,7 +153,7 @@ architecture rtl of cpu is
   signal cu_reg_write_en : std_logic;
   signal cu_bus1_mux : std_logic_vector(1 downto 0);
   signal cu_bus2_mux : std_logic;
-  signal cu_bus3_mux : std_logic;
+  signal cu_reg_write_mux : std_logic_vector(1 downto 0);
   signal cu_latch_instr : std_logic;
   signal cu_lsu_signed : std_logic;
   signal cu_npc_mux : std_logic_vector(1 downto 0);
@@ -169,8 +169,8 @@ architecture rtl of cpu is
   signal bus1 : std_logic_vector(31 downto 0);
   signal bus2 : std_logic_vector(31 downto 0);
   signal bus3 : std_logic_vector(31 downto 0);
-  signal alu_out : std_logic_vector(31 downto 0);
   signal lsu_out : std_logic_vector(31 downto 0);
+  signal reg_write : std_logic_vector(31 downto 0);
 
   -- misc
   signal branch_out : std_logic;
@@ -191,9 +191,10 @@ begin
     rs2_val when '0',
     id_imm when '1',
     UNDEF32 when others;
-  with cu_bus3_mux select bus3 <=
-    alu_out when '0',
-    lsu_out when '1',
+  with cu_reg_write_mux select reg_write <=
+    bus3 when "00",
+    pc_inc when "01",
+    lsu_out when "10",
     UNDEF32 when others;
   with branch_out select branch_pc <=
     pc_inc when '0',
@@ -241,7 +242,7 @@ begin
     cu_reg_write_en,
     cu_bus1_mux,
     cu_bus2_mux,
-    cu_bus3_mux,
+    cu_reg_write_mux,
     mem_read_en,
     mem_write_en,
     mem_size,
@@ -271,7 +272,7 @@ begin
     id_funct7,
     bus1,
     bus2,
-    alu_out
+    bus3
   );
 
   load_store_unit_inst: load_store_unit port map(

@@ -23,7 +23,8 @@ build_dir() {
 
 analyze() {
   set -e
-  HDL_FILES=`find hdl/ -type f`
+  #HDL_FILES=`find hdl/ -type f`
+  HDL_FILES="hdl/ffi.vhd hdl/main.vhd hdl/opcodes.vhd hdl/instr_decoder.vhd hdl/instr_fetch.vhd hdl/cpu.vhd hdl/alu.vhd"
   for F in $HDL_FILES ; do
     printf "GHDL_A $F\n"
   done
