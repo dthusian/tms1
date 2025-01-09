@@ -43,5 +43,5 @@ begin
 
   pc_inc <= std_logic_vector(unsigned(pc) + 4);
   pc <= pc_reg;
-  instr <= instr_reg;
+  instr <= instr_read when instr_latch else instr_reg;
 end rtl;

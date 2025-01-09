@@ -14,6 +14,7 @@ entity control_unit is port (
   bus1_mux : out std_logic_vector(1 downto 0);
   bus2_mux : out std_logic;
   reg_write_mux : out std_logic_vector(1 downto 0);
+  mem_addr_mux : out std_logic;
   mem_read_en : out std_logic;
   mem_write_en : out std_logic;
   mem_size : out std_logic_vector(1 downto 0);
@@ -87,6 +88,7 @@ begin
             reg_write_mux <= "XX"; -- reg_write_en = false = don't care
         end case;
 
+        mem_addr_mux <= '0';
         mem_read_en <= '1';
         mem_write_en <= '0';
         mem_size <= "10";
@@ -112,6 +114,7 @@ begin
         bus1_mux <= "00"; -- rs1
         bus2_mux <= '1'; -- imm
         reg_write_mux <= "10"; -- lsu out
+        mem_addr_mux <= '1';
         mem_read_en <= '1' when opcode = OP_LOAD else '0';
         mem_write_en <= '1' when opcode = OP_STORE else '0';
         mem_size <= funct3(1 downto 0);

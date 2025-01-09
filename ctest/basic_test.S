@@ -1,6 +1,8 @@
+  .section .init
   .global _start
 _start:
   li a0, 0
 loop:
   addi a0, a0, 1
   j loop
+

@@ -73,6 +73,9 @@ architecture rtl of cpu is
     -- 01: pcinc
     -- 10: lsu_out
     reg_write_mux : out std_logic_vector(1 downto 0);
+    -- 0: pc
+    -- 1: bus3
+    mem_addr_mux : out std_logic;
     -- 1: reads from memory
     mem_read_en : out std_logic;
     -- 1: writes to memory
@@ -157,6 +160,7 @@ architecture rtl of cpu is
   signal cu_bus1_mux : std_logic_vector(1 downto 0);
   signal cu_bus2_mux : std_logic;
   signal cu_reg_write_mux : std_logic_vector(1 downto 0);
+  signal cu_mem_addr_mux : std_logic;
   signal cu_latch_instr : std_logic;
   signal cu_lsu_signed : std_logic;
   signal cu_npc_mux : std_logic_vector(1 downto 0);
@@ -179,6 +183,7 @@ architecture rtl of cpu is
   signal branch_out : std_logic;
   signal branch_pc : std_logic_vector(31 downto 0);
 begin
+  syshalt <= '0';
   trap_memory_fault <= mem_fault;
 
   -- assign busses
@@ -206,6 +211,10 @@ begin
     pc_inc when "01",
     bus3 when "10",
     branch_pc when "11",
+    UNDEF32 when others;
+  with cu_mem_addr_mux select mem_addr <=
+    pc when '0',
+    bus3 when '1',
     UNDEF32 when others;
 
   instr_fetch_inst: instr_fetch port map(
@@ -245,6 +254,7 @@ begin
     cu_bus1_mux,
     cu_bus2_mux,
     cu_reg_write_mux,
+    cu_mem_addr_mux,
     mem_read_en,
     mem_write_en,
     mem_size,

@@ -5,7 +5,7 @@ library work;
 use work.ffi.all;
 
 entity main is port (
-  dummy : out boolean
+  dummy: out boolean
 );
 end entity main;
 
@@ -25,8 +25,8 @@ architecture testbench of main is
   );
   end component;
 
-  signal clk : std_logic := '0';
-  signal init : std_logic := '1';
+  signal clk : std_logic;
+  signal init : std_logic;
   signal syshalt : std_logic;
   signal mem_addr : std_logic_vector(31 downto 0);
   signal mem_rdata : std_logic_vector(31 downto 0);
@@ -44,8 +44,8 @@ begin
     mem_rdata,
     mem_wdata,
     mem_size,
-    mem_write_en,
     mem_read_en,
+    mem_write_en,
     mem_fault
   );
 
@@ -54,11 +54,22 @@ begin
     variable tmp_mem_fault : std_logic := '0';
   begin
     bus_init;
-    while syshalt /= '1' loop
-      -- rising edge triggers CPU
+    clk <= '0';
+    init <= '1';
+    for i in 0 to 0 loop
+      wait for 50 ns;
       clk <= '1';
+      wait for 50 ns;
+      clk <= '0';
+    end loop;
+    wait for 50 ns;
+    init <= '0';
+    while syshalt /= '1' loop
       -- turn off init
       init <= '0';
+      -- rising edge triggers CPU
+      clk <= '1';
+      wait for 1 ns;
       -- initiate bus cycle after CPU
       bus_cycle(  
         mem_addr,
@@ -72,7 +83,7 @@ begin
       mem_rdata <= tmp_mem_rdata;
       mem_fault <= tmp_mem_fault;
 
-      wait for 50 ns;
+      wait for 49 ns;
       clk <= '0';
       wait for 50 ns;
     end loop;
