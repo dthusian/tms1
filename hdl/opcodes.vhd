@@ -44,4 +44,19 @@ package opcodes is
 
   constant UNDEF32 : std_logic_vector(31 downto 0) := "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
+  -- branch functs
+  constant FN_BEQ  : std_logic_vector(2 downto 0) := "000";
+  constant FN_BNE  : std_logic_vector(2 downto 0) := "001";
+  constant FN_BLT  : std_logic_vector(2 downto 0) := "010";
+  constant FN_BGE  : std_logic_vector(2 downto 0) := "011";
+  constant FN_BLTU : std_logic_vector(2 downto 0) := "110";
+  constant FN_BGEU : std_logic_vector(2 downto 0) := "111";
+
+  -- load/store functs
+  constant FN_MB  : std_logic_vector(2 downto 0) := "000";
+  constant FN_MH  : std_logic_vector(2 downto 0) := "001";
+  constant FN_MW  : std_logic_vector(2 downto 0) := "010";
+  constant FN_MBU : std_logic_vector(2 downto 0) := "100";
+  constant FN_MHU : std_logic_vector(2 downto 0) := "101";
+
 end opcodes;

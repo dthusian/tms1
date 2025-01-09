@@ -21,7 +21,9 @@ hdl/cpu.vhd
 hdl/alu.vhd
 hdl/control_unit.vhd
 hdl/shifter.vhd
-hdl/reg_file.vhd"
+hdl/reg_file.vhd
+hdl/branch_unit.vhd
+hdl/load_store_unit.vhd"
 EMU_DIR="emu/"
 
 set -e

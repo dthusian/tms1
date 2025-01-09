@@ -123,6 +123,7 @@ architecture rtl of cpu is
   component load_store_unit port (
     -- sign-extension of load values
     mem_read : in std_logic_vector(31 downto 0);
+    mem_size : in std_logic_vector(1 downto 0);
     lsu_signed : in std_logic;
     load_value : out std_logic_vector(31 downto 0)
   );
@@ -278,6 +279,7 @@ begin
 
   load_store_unit_inst: load_store_unit port map(
     mem_rdata,
+    mem_size,
     cu_lsu_signed,
     lsu_out
   );
