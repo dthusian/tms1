@@ -31,7 +31,7 @@ SECTIONS {
         . = ALIGN(4);
         PROVIDE(__data_start = .);
         *(.data .data.*)
-        PROVIDE(__global_pointer$ = .);
+        PROVIDE(__global_pointer = .);
         *(.sdata .sdata.*)
         PROVIDE(__data_end = .);
     } > RAM AT>ROM :ram_init
@@ -45,4 +45,5 @@ SECTIONS {
     
     . = ALIGN(16);
     PROVIDE(__stack_bot = .);
+    PROVIDE(__stack_top = . + 0x100000);
 }

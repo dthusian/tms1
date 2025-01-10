@@ -216,6 +216,7 @@ begin
     pc when '0',
     bus3 when '1',
     UNDEF32 when others;
+  mem_wdata <= rs2_val;
 
   instr_fetch_inst: instr_fetch port map(
     clk,

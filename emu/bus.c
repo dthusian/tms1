@@ -51,9 +51,7 @@ static int read_memory(uint32_t addr, uint32_t* val, int size) {
 }
 
 static int write_memory(uint32_t addr, uint32_t val, int size) {
-  if(addr >= BOOTROM_BASE && addr < BOOTROM_BASE + BOOTROM_SIZE) {
-    return write_ptr(mem_bootrom, addr - BOOTROM_BASE, val, size);
-  } else if(addr >= DRAM_BASE && addr < DRAM_BASE + DRAM_SIZE) {
+  if(addr >= DRAM_BASE && addr < DRAM_BASE + DRAM_SIZE) {
     return write_ptr(mem_dram, addr - DRAM_BASE, val, size);
   } else if(addr >= UART_BASE && addr < UART_BASE + UART_SIZE) {
     return uart_write(addr - UART_BASE, val, size);
