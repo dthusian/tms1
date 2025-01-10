@@ -29,7 +29,7 @@ begin
       if init then
         pc_reg <= X"10000000";
       else
-        pc_reg <= next_pc;
+        pc_reg <= next_pc(31 downto 1) & "0";
       end if;
 
       -- update instruction

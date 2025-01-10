@@ -37,7 +37,8 @@ int uart_cycle() {
   if(state.cycle != 0) {
     return 0;
   }
-    
+  
+  fflush(stdout);
   // if DR is still set, don't try to read more
   if(!(state.regs[5] & 0x1)) {
     char buf;
@@ -80,7 +81,7 @@ int uart_write(uint32_t offset, uint32_t val, int size) {
     return 1;
   }
 
-  if((state.regs[3] | 0x80) && offset < 2) {
+  if((state.regs[3] & 0x80) && offset < 2) {
     state.dl[offset] = val;
   } else if(offset > 0) {
     state.regs[offset] = val;
