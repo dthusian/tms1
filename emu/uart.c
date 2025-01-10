@@ -2,20 +2,33 @@
 #include"uart.h"
 #include<stdint.h>
 #include<stdlib.h>
-#include<unistd.h>
-#include<fcntl.h>
 #include<stdio.h>
+#include<errno.h>
+#include<pthread.h>
 
 // emulates config registers as ignored read/writable memory
 
 struct uart_state_t {
+  // register state
   uint8_t regs[8];
   uint8_t dl[2];
   int cycle;
+
+  // stdin read thread state
+  pthread_t read_thread;
+  pthread_mutex_t mutex;
+  pthread_cond_t empty;
+  char read_ch;
 } state;
 
-void uart_deinit() {
-  fcntl(0, F_SETFL, fcntl(0, F_GETFL) & ~O_NONBLOCK);
+void* uart_read_thread(void*) {
+  pthread_mutex_lock(&state.mutex);
+  while(1) {
+    printf("locked\n");
+    pthread_cond_wait(&state.empty, &state.mutex);
+    state.read_ch = getchar();
+  }
+  return NULL;
 }
 
 void uart_init() {
@@ -24,9 +37,9 @@ void uart_init() {
     .dl = { },
     .cycle = 0
   };
-
-  fcntl(0, F_SETFL, fcntl(0, F_GETFL) | O_NONBLOCK);
-  atexit(uart_deinit);
+  pthread_create(&state.read_thread, NULL, uart_read_thread, NULL);
+  pthread_mutex_init(&state.mutex, NULL);
+  pthread_cond_init(&state.empty, NULL);
 }
 
 int uart_cycle() {
@@ -39,6 +52,7 @@ int uart_cycle() {
   }
   
   fflush(stdout);
+  /*
   // if DR is still set, don't try to read more
   if(!(state.regs[5] & 0x1)) {
     char buf;
@@ -48,7 +62,7 @@ int uart_cycle() {
       state.regs[0] = buf;
       return 1;
     }
-  }
+  }*/
   return 0;
 }
 
@@ -59,16 +73,30 @@ int uart_read(uint32_t offset, uint32_t* val, int size) {
   if(offset >= 8) {
     return 1;
   }
+  //printf("read %d %d\n", offset, size);
 
-  if((state.regs[3] | 0x80) && offset < 2) {
+  if((state.regs[3] & 0x80) && offset < 2) {
     *val = state.dl[offset];
-  } else if(offset > 0) {
+  } else if(offset == 0) {
+    int code = pthread_mutex_trylock(&state.mutex);
+    if(code == EBUSY) {
+      *val = 0;
+    } else {
+      *val = state.read_ch;
+      pthread_mutex_unlock(&state.mutex);
+      pthread_cond_signal(&state.empty);
+    }
+  } else if(offset == 5) {
+    // if the mutex can be locked, then there is a byte present
+    int code = pthread_mutex_trylock(&state.mutex);
+    if(code == EBUSY) {
+      *val = 0;
+    } else {
+      *val = 1;
+      pthread_mutex_unlock(&state.mutex);
+    }
+  } else {
     *val = state.regs[offset];
-  } else { // uart register
-    *val = state.regs[0];
-    // clear read buf and DR
-    state.regs[0] = 0;
-    state.regs[5] &= ~0x1;
   }
   return 0;
 }

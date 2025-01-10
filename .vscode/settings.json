@@ -4,6 +4,8 @@
   "files.associations": {
     "stdio.h": "c",
     "stdlib.h": "c",
-    "bus.h": "c"
+    "bus.h": "c",
+    "errno.h": "c",
+    "math.h": "c"
   }
 }

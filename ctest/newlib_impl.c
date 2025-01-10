@@ -1,5 +1,6 @@
 #include <sys/stat.h>
 #include <errno.h>
+#include <stdio.h>
 #undef errno
 extern int errno;
 

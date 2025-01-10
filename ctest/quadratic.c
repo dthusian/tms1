@@ -2,13 +2,29 @@
 #include<stdlib.h>
 #include<math.h>
 
+int _read(int fd, char* ptr, int len);
+
+int readchar() {
+  char c;
+  _read(0, &c, 1);
+  return c;
+}
+
+char* budget_fgets(char* buf, int, FILE*) {
+  char c = readchar();
+  while(c != '\n') {
+    *(buf++) = c;
+    c = readchar();
+  }
+}
+
 void main() {
-  char buf[100];
+  char buf[105];
   double a, b, c;
   printf("hello world!\n");
 
   printf("a: ");
-  fgets(buf, 100, stdin);
+  budget_fgets(buf, 100, stdin);
   a = strtod(buf, NULL);
 
   printf("b: ");
