@@ -26,6 +26,7 @@ loop:
 
   j loop
 
+  .section .data
 data:
   .byte 0x11
   .byte 0x33

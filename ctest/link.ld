@@ -29,6 +29,7 @@ SECTIONS {
 
     .data : {
         . = ALIGN(4);
+        __data_src = LOADADDR(.data);
         PROVIDE(__data_start = .);
         *(.data .data.*)
         PROVIDE(__global_pointer = .);

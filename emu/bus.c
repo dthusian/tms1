@@ -29,7 +29,7 @@ static int write_ptr(void* ptr, uint32_t offset, uint32_t val, int size) {
     *(uint8_t*)p = val;
   } else if(size == SIZE_16B) {
     *(uint16_t*)p = val;
-  } else if(size == SIZE_8B) {
+  } else if(size == SIZE_32B) {
     *(uint32_t*)p = val;
   } else {
     return 1;
