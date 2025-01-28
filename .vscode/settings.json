@@ -6,6 +6,18 @@
     "stdlib.h": "c",
     "bus.h": "c",
     "errno.h": "c",
-    "math.h": "c"
+    "math.h": "c",
+    "array": "c",
+    "string_view": "c",
+    "span": "c",
+    "__node_handle": "c",
+    "__split_buffer": "c",
+    "deque": "c",
+    "forward_list": "c",
+    "queue": "c",
+    "stack": "c",
+    "string": "c",
+    "unordered_map": "c",
+    "vector": "c"
   }
 }

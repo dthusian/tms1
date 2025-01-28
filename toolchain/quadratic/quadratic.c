@@ -3,6 +3,7 @@
 #include<math.h>
 
 int _read(int fd, char* ptr, int len);
+int _write(int fd, char* ptr, int len);
 
 int readchar() {
   char c;
@@ -21,8 +22,10 @@ char* budget_fgets(char* buf, int, FILE*) {
 void main() {
   char buf[105];
   double a, b, c;
-  printf("hello world!\n");
+  _write(1, "hello world\n", 12);
+  //printf("hello world!\n");
 
+  while(1) {}
   printf("a: ");
   fgets(buf, 100, stdin);
   a = strtod(buf, NULL);
