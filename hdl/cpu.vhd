@@ -91,7 +91,8 @@ architecture rtl of cpu is
     -- 10: bus3
     -- 11: if branch unit says yes, bus3, otherwise, pc + 4
     npc_mux : out std_logic_vector(1 downto 0);
-    alu_opr : out std_logic
+    alu_opr : out std_logic;
+    alu_override_add : out std_logic
   );
   end component;
 
@@ -114,6 +115,7 @@ architecture rtl of cpu is
   -- purely combinational
   component alu port (
     opr : in std_logic;
+    override_add : in std_logic;
     funct3 : in std_logic_vector(2 downto 0);
     funct7 : in std_logic_vector(6 downto 0);
     a : in std_logic_vector(31 downto 0);
@@ -165,6 +167,7 @@ architecture rtl of cpu is
   signal cu_lsu_signed : std_logic;
   signal cu_npc_mux : std_logic_vector(1 downto 0);
   signal cu_alu_opr : std_logic;
+  signal cu_alu_override_add : std_logic;
 
   -- busses
   signal instr : std_logic_vector(31 downto 0);
@@ -262,7 +265,8 @@ begin
     cu_latch_instr,
     cu_lsu_signed,
     cu_npc_mux,
-    cu_alu_opr
+    cu_alu_opr,
+    cu_alu_override_add
   );
 
   reg_file_inst: reg_file port map(
@@ -281,6 +285,7 @@ begin
 
   alu_inst: alu port map(
     cu_alu_opr,
+    cu_alu_override_add,
     id_funct3,
     id_funct7,
     bus1,

@@ -5,6 +5,7 @@ use work.opcodes.all;
 
 entity alu is port (
   opr : in std_logic;
+  override_add: in std_logic;
   funct3 : in std_logic_vector(2 downto 0);
   funct7 : in std_logic_vector(6 downto 0);
   a : in std_logic_vector(31 downto 0);
@@ -18,7 +19,7 @@ architecture rtl of alu is
   -- i.e. is defined as a canonical OP-IMM variant and OP with funct7 = "0000000"
   impure function basic_op(f3 : std_logic_vector(2 downto 0)) return boolean is
   begin
-    return opr = '0' or (funct3 = f3 and funct7 = F7_OP1);
+    return funct3 = f3 and (opr = '0' or funct7 = F7_OP1);
   end;
 
   -- returns true if the operation is an "extended op"
@@ -74,7 +75,7 @@ begin
 
   q <=
       std_logic_vector(unsigned(a) + unsigned(b))
-        when basic_op(FN_ADD) else
+        when basic_op(FN_ADD) or override_add = '1' else
       std_logic_vector(unsigned(a) - unsigned(b))
         when ext_op(FN_SUB, F7_OP2) else
       a and b

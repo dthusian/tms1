@@ -1,1 +1,1 @@
-exec docker run --rm -it --mount type=bind,source="$(pwd)",target=/mnt -w /mnt ghdl/ghdl:bookworm-mcode /usr/local/bin/ghdl $@
+exec podman run --rm -it --mount type=bind,source="$(pwd)",target=/mnt -w /mnt ghdl/ghdl:bookworm-llvm-14 /usr/local/bin/ghdl $@

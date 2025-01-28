@@ -29,6 +29,7 @@ dataloop:
   bltu t0, t1, dataloop
 dataloop_end:
 
+  jal test
   jal main
 spin:
   j spin

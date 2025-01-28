@@ -2,11 +2,11 @@
 
 cd "$(dirname "$0")"
 
-GHDL="ghdl"
+GHDL="bin/ghdl-docker"
 GHDL_FLAGS="--std=08"
 
 CC="cc"
-CFLAGS="-O2 -std=c11"
+CFLAGS="-O2 -std=c11 -fPIE"
 
 AR="ar"
 

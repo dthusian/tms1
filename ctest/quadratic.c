@@ -24,7 +24,7 @@ void main() {
   printf("hello world!\n");
 
   printf("a: ");
-  budget_fgets(buf, 100, stdin);
+  fgets(buf, 100, stdin);
   a = strtod(buf, NULL);
 
   printf("b: ");

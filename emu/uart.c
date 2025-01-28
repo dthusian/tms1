@@ -37,8 +37,11 @@ void uart_init() {
     .dl = { },
     .cycle = 0
   };
+  pthread_mutexattr_t mutex_attr;
+  pthread_mutexattr_init(&mutex_attr);
+  pthread_mutexattr_settype(&mutex_attr, PTHREAD_MUTEX_ERRORCHECK);
   pthread_create(&state.read_thread, NULL, uart_read_thread, NULL);
-  pthread_mutex_init(&state.mutex, NULL);
+  pthread_mutex_init(&state.mutex, &mutex_attr);
   pthread_cond_init(&state.empty, NULL);
 }
 

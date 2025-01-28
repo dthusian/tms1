@@ -21,7 +21,8 @@ entity control_unit is port (
   mem_ifetch : out std_logic;
   lsu_signed : out std_logic;
   npc_mux : out std_logic_vector(1 downto 0);
-  alu_opr : out std_logic
+  alu_opr : out std_logic;
+  alu_override_add : out std_logic
 );
 end entity;
 
@@ -110,7 +111,8 @@ begin
           end case;
         end if;
 
-        alu_opr <= '1' when opcode = OP_OP else '0';
+        alu_opr <= '0' when opcode = OP_OPIMM else '1';
+        alu_override_add <= '0' when opcode = OP_OPIMM or opcode = OP_OP else '1';
 
       when state_mem =>
 
@@ -126,6 +128,7 @@ begin
         lsu_signed <= not funct3(2);
         npc_mux <= "01"; -- pc + 4
         alu_opr <= '0';
+        alu_override_add <= '1';
 
     end case;
   end process;
