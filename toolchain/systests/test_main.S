@@ -16,11 +16,11 @@ main:
   li t1, 0x30000000
   li t0, 0x656e6f64
   sb t0, (t1)
-  srli t0, 8
+  srli t0, t0, 8
   sb t0, (t1)
-  srli t0, 8
+  srli t0, t0, 8
   sb t0, (t1)
-  srli t0, 8
+  srli t0, t0, 8
   sb t0, (t1)
   li t0, '\n'
   sb t0, (t1)
