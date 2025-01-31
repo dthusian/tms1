@@ -11,8 +11,19 @@
 
   .global main
 main:
-  TEST 00,t00_add
 
+  // tests go here
+
+  TEST 00,t00_add
+  TEST 01,t01_bitwise
+  TEST 02,t02_auipc_jmp
+  TEST 03,t03_shift
+  TEST 04,t04_branch
+  TEST 05,t05_mem
+
+  // tests don't go here
+
+print_done:
   li t1, 0x30000000
   li t0, 0x656e6f64
   sb t0, (t1)

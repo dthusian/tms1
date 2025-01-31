@@ -17,7 +17,7 @@ with open(args.filename, "rb") as fp:
   elf = ELFFile(fp)
 
   for segment in elf.iter_segments(type="PT_LOAD"):
-    if segment["p_paddr"] + segment["p_filesz"] > ROM_BASE + ROM_SIZE or segment["p_paddr"] < ROM_BASE:
+    if (segment["p_paddr"] + segment["p_filesz"] > ROM_BASE + ROM_SIZE or segment["p_paddr"] < ROM_BASE) and segment["p_filesz"] > 0:
       print(f"elf2rom.py: warning: segment starting 0x{segment["p_paddr"]:x} with size 0x{segment["p_filesz"]:x} doesn't fit in ROM", file=sys.stderr)
     else:
       romaddr = segment["p_paddr"] - ROM_BASE
