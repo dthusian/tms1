@@ -32,7 +32,7 @@ package opcodes is
   constant FN_SRA  : std_logic_vector(2 downto 0) := "101";
 
   -- funct7 = "0000001"
-  constant F7_MUL    : std_logic_vector(6 downto 0) := "0000001";
+  constant F7_MULDIV : std_logic_vector(6 downto 0) := "0000001";
   constant FN_MUL    : std_logic_vector(2 downto 0) := "000";
   constant FN_MULH   : std_logic_vector(2 downto 0) := "001";
   constant FN_MULHSU : std_logic_vector(2 downto 0) := "010";
@@ -47,8 +47,8 @@ package opcodes is
   -- branch functs
   constant FN_BEQ  : std_logic_vector(2 downto 0) := "000";
   constant FN_BNE  : std_logic_vector(2 downto 0) := "001";
-  constant FN_BLT  : std_logic_vector(2 downto 0) := "010";
-  constant FN_BGE  : std_logic_vector(2 downto 0) := "011";
+  constant FN_BLT  : std_logic_vector(2 downto 0) := "100";
+  constant FN_BGE  : std_logic_vector(2 downto 0) := "101";
   constant FN_BLTU : std_logic_vector(2 downto 0) := "110";
   constant FN_BGEU : std_logic_vector(2 downto 0) := "111";
 

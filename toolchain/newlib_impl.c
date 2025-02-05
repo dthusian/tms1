@@ -12,14 +12,14 @@ int _close(int file) {
 
 int _read(int file, char *ptr, int len) {
   if(file == 0) {
-    for(int i = 0; i < len; i++) {
-      while(1) {
-        int rdy = uart[5] & 0x1;
-        if(rdy) break;
-      }
+    // wait until at least one byte is ready
+    // (reading 0 bytes is interpreted by newlib as stdin being closed)
+    while(!(uart[5] & 0x1)) { }
+    int i;
+    for(i = 0; (i < len) && (uart[5] & 0x1); i++) {
       ptr[i] = *uart;
     }
-    return len;
+    return i;
   } else {
     return 0;
   }

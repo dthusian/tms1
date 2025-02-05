@@ -20,6 +20,7 @@ main:
   TEST 03,t03_shift
   TEST 04,t04_branch
   TEST 05,t05_mem
+  TEST 06,t06_slt
 
   // tests don't go here
 

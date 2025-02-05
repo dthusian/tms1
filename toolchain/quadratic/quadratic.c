@@ -22,10 +22,8 @@ char* budget_fgets(char* buf, int, FILE*) {
 void main() {
   char buf[105];
   double a, b, c;
-  _write(1, "hello world\n", 12);
-  //printf("hello world!\n");
+  printf("hello world!\n");
 
-  while(1) {}
   printf("a: ");
   fgets(buf, 100, stdin);
   a = strtod(buf, NULL);

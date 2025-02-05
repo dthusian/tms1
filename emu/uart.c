@@ -13,7 +13,12 @@ int poll_chr() {
   poll_fd.fd = STDIN_FILENO;
   poll_fd.events = POLLIN;
   poll_fd.revents = 0;
-  poll(&poll_fd, 1, 0);
+  int status = poll(&poll_fd, 1, 0);
+  if(status < 0 || (poll_fd.revents & POLLERR) || (poll_fd.revents & POLLHUP) || (poll_fd.revents & POLLNVAL)) {
+    printf("uart: error while polling");
+    perror("poll");
+    exit(1);
+  }
   if(poll_fd.revents & POLLIN) return 1;
   else return 0;
 }
@@ -36,14 +41,6 @@ void uart_init() {
 }
 
 int uart_cycle() {
-  // calling read() a lot can become a bottleneck, so make
-  // the uart only poll every 1000 cycles
-  state.cycle++;
-  state.cycle %= 1000;
-  if(state.cycle != 0) {
-    return 0;
-  }
-  
   return 0;
 }
 
@@ -54,7 +51,6 @@ int uart_read(uint32_t offset, uint32_t* val, int size) {
   if(offset >= 8) {
     return 1;
   }
-  //printf("read %d %d\n", offset, size);
 
   if((state.regs[3] & 0x80) && offset < 2) {
     *val = state.dl[offset];
@@ -63,9 +59,9 @@ int uart_read(uint32_t offset, uint32_t* val, int size) {
     if(poll_chr()) {
       read(STDIN_FILENO, &c, 1);
     }
-    return c;
+    *val = c;
   } else if(offset == 5) {
-    return poll_chr();
+    *val = poll_chr();
   } else {
     *val = state.regs[offset];
   }
@@ -74,10 +70,10 @@ int uart_read(uint32_t offset, uint32_t* val, int size) {
 
 int uart_write(uint32_t offset, uint32_t val, int size) {
   if(size != SIZE_8B) {
-    return 1;
+    return 0;
   }
   if(offset >= 8) {
-    return 1;
+    return 0;
   }
 
   if((state.regs[3] & 0x80) && offset < 2) {

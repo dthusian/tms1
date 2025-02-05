@@ -67,7 +67,7 @@ begin
     (opcode = OP_OPIMM and funct3 = FN_SLL and funct7 = "0000000") or
     (opcode = OP_OPIMM and funct3 = FN_SRL and (funct7 = "0000000" or funct7 = "0100000")) or
     (opcode = OP_OP and (
-      funct7 = "0000000" or
+      funct7 = "0000000" or funct7 = "0000001" or
       (funct7 = "0100000" and (funct3 = FN_SUB or funct3 = FN_SRA))
     )) or
     opcode = OP_FENCE or
