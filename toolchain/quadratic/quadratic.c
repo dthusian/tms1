@@ -42,12 +42,12 @@ void main() {
     printf("no solutions\n");
   } else if(discrim == 0) {
     double s = -b / two_a;
-    printf("solution: %d\n", s);
+    printf("solution: %f\n", s);
   } else if(discrim > 0) {
     double sqrt_discrim = sqrt(discrim);
     double s1 = (-b + sqrt_discrim) / two_a;
     double s2 = (-b - sqrt_discrim) / two_a;
-    printf("solution 1: %d\n", s1);
-    printf("solution 2: %d\n", s2);
+    printf("solution 1: %f\n", s1);
+    printf("solution 2: %f\n", s2);
   }
 }
