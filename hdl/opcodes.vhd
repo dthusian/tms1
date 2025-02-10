@@ -42,7 +42,7 @@ package opcodes is
   constant FN_REM    : std_logic_vector(2 downto 0) := "110";
   constant FN_REMU   : std_logic_vector(2 downto 0) := "111";
 
-  constant UNDEF32 : std_logic_vector(31 downto 0) := "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+  constant UNDEF32 : std_logic_vector(31 downto 0) := X"00000000";
 
   -- branch functs
   constant FN_BEQ  : std_logic_vector(2 downto 0) := "000";
